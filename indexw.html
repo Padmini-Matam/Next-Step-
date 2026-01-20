@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Weather App</h2>
+        <input type="text" id="location" placeholder="Enter location">
+        <button onclick="getWeather()">Get Weather</button>
+        <h3 id="result"></h3>
+    </div>
+    
+    <script>
+        async function getWeather() {
+            const location = document.getElementById('location').value;
+            const apiKey = '06a2e9c3d16742acb4a82721250702';
+            const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=yes`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.error) {
+                    document.getElementById('result').innerText = "Location not found";
+                } else {
+                    const temp = data.current.temp_c;
+                    const weatherCondition = data.current.condition.text;
+                    const city = data.location.name;
+                    document.getElementById('result').innerText = `Location: ${city}\nTemperature: ${temp}°C\nCondition: ${weatherCondition}`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerText = "Error fetching data";
+            }
+        }
+    </script>
+</body>
+</html>
+
